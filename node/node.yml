@@ -1,0 +1,18 @@
+---
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+   update_cache: yes
+
+- name: Ansible shell module multiple commands
+  shell: 'curl -fsSL https://deb.nodesource.com/setup_{{node-version}}.x | sudo -E bash -'
+
+- name: Install required packages
+  apt: name={{ item }} state=present
+  with_items:
+    - nodejs
+    - nginx
+
+- name: Install PM2
+  npm:
+    name: pm2@latest
+    global: yes    

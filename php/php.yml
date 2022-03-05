@@ -1,0 +1,48 @@
+---
+- name: Installation install software-properties-common
+  apt: name=software-properties-common
+
+- name: "Repo PHP {{ php_version }}"
+  apt_repository:
+    repo="ppa:ondrej/php"
+
+- name: "Updating the repo"
+  apt: update_cache=yes
+
+# - name: Installation PHP
+#   apt:
+#     name: php{{ php_version }} 
+#   state: present
+
+- name: installation PHP
+  apt: name={{ item }} state=present
+  with_items:
+    - php
+
+- name: Install PHP
+  apt:
+    pkg:
+      - "php{{ php_version }}-fpm"
+      - "php{{ php_version }}-mysql"
+      - "php{{ php_version }}-curl"
+      - "php{{ php_version }}-json"
+      - "php{{ php_version }}-cgi"
+      - "php{{ php_version }}-xsl"
+      - "php{{ php_version }}-cgi"
+      - "php{{ php_version }}-gd"
+      - "php{{ php_version }}-mbstring"
+      - "php{{ php_version }}-zip"
+      - "php{{ php_version }}-xmlrpc"
+      - "php{{ php_version }}-soap"
+      - "php{{ php_version }}-intl"
+      - apache2
+      # - libapache2-mod-php
+    state: present
+    update_cache: yes
+
+- name: install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    creates: /usr/local/bin/composer
+
+# when: inventory_hostname in groups['php-team']

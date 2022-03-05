@@ -1,0 +1,49 @@
+- hosts: php-team
+  become: yes
+  vars_prompt: 
+    - name: php-version
+      prompt: "Specify php version"
+      default: 7.4
+      
+  tasks:
+    - name: Installation install software-properties-common
+      apt: name=software-properties-common
+
+    - name: "Repo PHP {{ php-version }}"
+      apt_repository:
+        repo="ppa:ondrej/php"
+   
+    - name: "Updating the repo"
+      apt: update_cache=yes
+
+    - name: Installation PHP 
+      apt: name=php{{ php-version }}
+      state: present
+
+    - name: Install PHP
+      apt:
+        pkg:
+          - "php{{ php-version }}-fpm"
+          - "php{{ php-version }}-mysql"
+          - "php{{ php-version }}-curl"
+          - "php{{ php-version }}-json"
+          - "php{{ php-version }}-cgi"
+          - "php{{ php-version }}-xsl"
+          - "php{{ php-version }}-cgi"
+          - "php{{ php-version }}-gd"
+          - "php{{ php-version }}-mbstring"
+          - "php{{ php-version }}-zip"
+          - "php{{ php-version }}-xmlrpc"
+          - "php{{ php-version }}-soap"
+          - "php{{ php-version }}-intl"
+          - apache2
+          # - libapache2-mod-php
+        state: present
+        update_cache: yes 
+
+    - name: install composer
+      shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      args:
+        creates: /usr/local/bin/composer
+
+# when: inventory_hostname in groups['php-team']

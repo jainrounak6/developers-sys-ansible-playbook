@@ -1,0 +1,18 @@
+---
+- name: add skype repo key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: add skype repo
+  apt_repository:
+    # repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    filename: docker-stable
+
+- name: install docker
+  apt: name={{ item }} update_cache=true state=present
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
