@@ -1,11 +1,11 @@
 ---
 - name: Inspect postman file
-  stat: path=~/bin/Postman/Postman
+  stat: path=/bin/postman
   register: postman_file
 
-- name: Install postman
+- name: Installing postman
   when: not postman_file.stat.exists
   unarchive:
     remote_src: yes
     src: https://dl.pstmn.io/download/latest/linux64
-    dest: ~/bin
+    dest: /bin/

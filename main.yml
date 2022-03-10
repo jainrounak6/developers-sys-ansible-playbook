@@ -1,58 +1,45 @@
 - hosts: all
+  become: yes
+  vars_prompt: 
+    - name: php_version
+      prompt: "Specify PHP Version"
+      default: 7.4
+
+    - name: node_version
+      prompt: "Specify Node version"
+      default: 14  
+
   tasks:
     - debug:
-        msg: play1
+        msg: Basic requirement packages for all hosts
     - include: basic/basic_dependencies.yml
     - include: chrome/chrome.yml
     - include: dbeaver/dbeaver.yml
+    - include: skype/skype.yml
     - include: docker/docker.yml
     - include: postman/postman.yml
-    - include: skype/skype.yml
     - include: tableplus/tableplus.yml
     - include: teams/teams.yml
     - include: vscode/vscode.yml
 
-- hosts: php-team
+- hosts: phpteam
+  become: yes
   tasks:
     - debug:
-        msg: play1
+        msg: PHP-Team
     - include: node/node.yml
 
-- hosts: node-team
+- hosts: nodeteam
+  become: yes
   tasks:
     - debug:
-        msg: play1
+        msg: Node-Team
     - include: php/php.yml
 
-# - name: Basic packages install
-#   import_playbook: basic/basic_dependencies.yml
-
-# - name: Chrome install
-#   import_playbook: chrome/chrome.yml
-
-# - name: DBeaver install
-#   import_playbook: dbeaver/dbeaver.yml
-
-# - name: Docker install
-#   import_playbook: docker/docker.yml
-
-# - name: Node install
-#   import_playbook: node/node.yml
-
-# - name: PHP install
-#   import_playbook: php/php.yml
-
-# - name: Postman install
-#   import_playbook: postman/postman.yml
-
-# - name: Skype install
-#   import_playbook: skype/skype.yml
-
-# - name: Tableplus install
-#   import_playbook: tableplus/tableplus.yml
-
-# - name: MS Teams install
-#   import_playbook: teams/teams.yml
-
-# - name: VS Code install
-#   import_playbook: vscode/vscode.yml
+- hosts: testsystem
+  become: yes
+  tasks:
+    - debug:
+        msg: Test-System
+    - include: php/php.yml
+    - include: node/node.yml

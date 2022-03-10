@@ -1,0 +1,2 @@
+[group1]
+192.168.10.xx ansible_user=username ansible_password=password

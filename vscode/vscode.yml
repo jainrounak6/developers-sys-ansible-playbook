@@ -1,20 +1,16 @@
 ---
-- name: install key (apt)
-  become: yes
+- name: Adding Microsoft Key 
   apt_key:
     url: 'https://packages.microsoft.com/keys/microsoft.asc'
     state: present
 
-- name: install VS Code repo (apt)
-  become: yes
+- name: Adding VS Code Repo
   apt_repository:
     repo: 'deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main'
     filename: vscode
     state: present
-  when: not visual_studio_code_skip_add_repo
 
-- name: install VS Code (apt)
-  become: yes
+- name: Installing VS Code
   apt:
     name: code
     state: present

@@ -1,18 +1,18 @@
 ---
-- name: add skype repo key
+- name: Add Docker Key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
-- name: add skype repo
+- name: Adding Docker Repo
   apt_repository:
     # repo: deb https://download.docker.com/linux/ubuntu bionic stable
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
     filename: docker-stable
 
-- name: install docker
-  apt: name={{ item }} update_cache=true state=present
-  with_items:
-    - docker-ce
-    - docker-ce-cli
-    - containerd.io
+- name: Installing Docker
+  apt: 
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: present
+    force_apt_get: yes
+    update_cache: yes

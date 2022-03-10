@@ -1,13 +1,38 @@
 ---
-- name: add skype repo key
+- name: Check if Skype is installed
+  command: dpkg-query -W skypeforlinux
+  register: skypeforlinux_check_deb
+  failed_when: skypeforlinux_check_deb.rc > 1
+  changed_when: skypeforlinux_check_deb.rc == 1
+
+- name: Adding Skype Key
   apt_key:
     url: https://repo.skype.com/data/SKYPE-GPG-KEY
+    state: present
+  when: skypeforlinux_check_deb.rc == 1  
 
-- name: add skype repo
+- name: Adding Skype Repo
   apt_repository:
     repo: deb [arch=amd64] https://repo.skype.com/deb stable main
     filename: skype-stable
+    update_cache: yes
+  when: skypeforlinux_check_deb.rc == 1
 
-- name: install skype
+- name: Installing skype
   apt:
     name: skypeforlinux
+    force_apt_get: yes
+    update_cache: yes
+
+
+# ---
+# - name: Download Skype
+#   get_url: url="https://go.skype.com/skypeforlinux-64.deb" dest="/tmp/skypeforlinux-64.deb"
+#   when: skypeforlinux_check_deb.rc == 1   
+
+# - name: Install skype updated file
+#   apt: deb="/tmp/skypeforlinux-64.deb"
+#   when: skypeforlinux_check_deb.rc == 1
+
+# - name: Clean skype deb file
+#   file: path=/tmp/skypeforlinux-64.deb state=absent

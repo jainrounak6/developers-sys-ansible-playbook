@@ -1,40 +1,33 @@
 ---
-- name: Installation install software-properties-common
+- name: Installing install software-properties-common
   apt: name=software-properties-common
 
-- name: "Repo PHP {{ php_version }}"
+- name: "Adding PHP {{ php_version | default('7.4') }} Repo"
   apt_repository:
     repo="ppa:ondrej/php"
 
-- name: "Updating the repo"
-  apt: update_cache=yes
+- name: Installing PHP
+  apt:
+    name: ['php']
+    state: present
+    update_cache: yes
 
-# - name: Installation PHP
-#   apt:
-#     name: php{{ php_version }} 
-#   state: present
-
-- name: installation PHP
-  apt: name={{ item }} state=present
-  with_items:
-    - php
-
-- name: Install PHP
+- name: Installing PHP Modules
   apt:
     pkg:
-      - "php{{ php_version }}-fpm"
-      - "php{{ php_version }}-mysql"
-      - "php{{ php_version }}-curl"
-      - "php{{ php_version }}-json"
-      - "php{{ php_version }}-cgi"
-      - "php{{ php_version }}-xsl"
-      - "php{{ php_version }}-cgi"
-      - "php{{ php_version }}-gd"
-      - "php{{ php_version }}-mbstring"
-      - "php{{ php_version }}-zip"
-      - "php{{ php_version }}-xmlrpc"
-      - "php{{ php_version }}-soap"
-      - "php{{ php_version }}-intl"
+      - "php{{ php_version | default('7.4') }}-fpm"
+      - "php{{ php_version | default('7.4') }}-mysql"
+      - "php{{ php_version | default('7.4') }}-curl"
+      - "php{{ php_version | default('7.4') }}-json"
+      - "php{{ php_version | default('7.4') }}-cgi"
+      - "php{{ php_version | default('7.4') }}-xsl"
+      - "php{{ php_version | default('7.4') }}-cgi"
+      - "php{{ php_version | default('7.4') }}-gd"
+      - "php{{ php_version | default('7.4') }}-mbstring"
+      - "php{{ php_version | default('7.4') }}-zip"
+      - "php{{ php_version | default('7.4') }}-xmlrpc"
+      - "php{{ php_version | default('7.4') }}-soap"
+      - "php{{ php_version | default('7.4') }}-intl"
       - apache2
       # - libapache2-mod-php
     state: present
@@ -44,5 +37,3 @@
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   args:
     creates: /usr/local/bin/composer
-
-# when: inventory_hostname in groups['php-team']

@@ -14,6 +14,6 @@
 - name: Debian/Ubuntu Family | Installing Google Chrome
   apt:
     name: google-chrome-stable
-    state: present
+    state: latest
     force_apt_get: yes
     update_cache: yes
